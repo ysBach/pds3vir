@@ -18,6 +18,14 @@ Influenced by
     - Remove deprecated attributes.
 
 
+## Install
+After cloning this repo (see greeb "code" button at the top right),
+
+```
+$ cd <the directory where ``setup.py`` of this repo is located>
+$ pip install -e .
+```
+
 ## Usage
 ```python
 from pathlib import Path
