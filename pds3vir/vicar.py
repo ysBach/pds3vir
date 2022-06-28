@@ -368,17 +368,17 @@ class VicarImage():
                     warnings.warn(message)
 
         # Slice out the binary header
-        vicar_recs = vicar_LBLSIZE // vicar_RECSIZE
-        this.binary_header = records[vicar_recs : vicar_recs + vicar_NLB]
+        vicar_recs = vicar_LBLSIZE // vicar_RECSIZE  # Number of rows for VICAR label
+        top_recs = vicar_recs + vicar_NLB  # Start row of pixel data
+        left_pix = vicar_NBB // itemsize   # Start column of pixel data
+        this.binary_header = records[vicar_recs:top_recs, :]
         # Note that we assume BINTFMT == INTFMT. This is not checked.
 
-        top_recs = vicar_recs + vicar_NLB
-        left_pix = vicar_NBB // itemsize
-
-        data_recs = vicar_N2 * vicar_N3
-        this.prefix_2d = records[top_recs:top_recs+data_recs, :left_pix]
-
-        this.data_2d = records[top_recs:top_recs+data_recs, left_pix:left_pix+vicar_N1]
+        bot_recs = top_recs + vicar_N2*vicar_N3
+        #                     ^^^^^^^^^^^^^^^^^
+        # num of rows of pixel data (when N3=1)
+        this.prefix_2d = records[top_recs:bot_recs, :left_pix]
+        this.data_2d = records[top_recs:bot_recs, left_pix:left_pix+vicar_N1]
 
         # Reshape to separate the bands
         this.data_3d = this.data_2d.reshape((vicar_N3, vicar_N2, vicar_N1))
