@@ -30,7 +30,13 @@ $ pip install -e .
 ```python
 from pathlib import Path
 from matplotlib import pyplot as plt
+from matplotlib import rcParams
+
 import pds3vir as pds3
+
+rcParams.update({
+    'font.family': 'go mono, consolas, courier', 'font.size':12, 'mathtext.fontset':'stix',
+})
 
 lblpaths = list(Path("pdsimage2.wr.usgs.gov/").glob("**/*.lbl"))
 pds = pds3.open_pds3(lblpaths[0])
@@ -41,22 +47,37 @@ pds = pds3.open_pds3(lblpaths[0])
 #   pds3.open_pds3(lblpaths[0], cut=False)
 # to get the full image with many 0
 
-fig, axs = plt.subplots(1, 1, figsize=(5, 5), sharex=False, sharey=False, gridspec_kw=None)
+fig, axs = plt.subplots(1, 2, figsize=(9, 5), sharex=False, sharey=False, gridspec_kw=None)
 
-axs.imshow(pds.image, cmap='gray', origin="lower")
+hkmpp = pds.label["HORIZONTAL_PIXEL_SCALE"]/1000
+vkmpp = pds.label["VERTICAL_PIXEL_SCALE"]/1000
+# kmpp = km per pixel
+axs[0].imshow(pds.image, cmap='gray', origin="lower")
+secx = axs[0].secondary_xaxis('top', functions=(lambda x: x*hkmpp, lambda x: x/hkmpp))
+secy = axs[0].secondary_yaxis('right', functions=(lambda x: x*vkmpp, lambda x: x/vkmpp))
+secx.set_xlabel("Horizontal Scale (km)")
+secy.set_ylabel("Vertical Scale (km)")
+axs[1].axis("off")
+
+txt = ""
+for h in ["image_id", "image_time", "target_name", "filter_name",
+          "exposure_duration", "gain_mode_id", "RIGHT_ASCENSION", "declination",
+          "phase_angle", "SOLAR_DISTANCE", "LOCAL_HOUR_ANGLE",
+          "HORIZONTAL_PIXEL_SCALE", "VERTICAL_PIXEL_SCALE"]:
+    val = str(pds.label[h.upper()]).replace(" ", "\n" + " "*21)
+    txt += f"{h.upper():>20s}: {val} \n"
+axs[1].text(0, 0.2, txt, fontsize=9)
 
 plt.tight_layout()
 plt.show();
-
-for h in ["image_id", "image_time", "target_name", "filter_name",
-          "exposure_duration", "gain_mode_id", "RIGHT_ASCENSION", "declination",
-          "phase_angle"]:
-    print(f"{h.upper():>20s}: {pds.label[h.upper()]}")
 ```
 
 One of the examples:
 
-![](examples/ex01.png)
+![](examples/ex-europa01.png)
+![](examples/ex-jupiter01.png)
+![](examples/ex-io01.png)
+
 
 
 
