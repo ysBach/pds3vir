@@ -218,7 +218,7 @@ class VicarImage():
     ############################################################################
 
     @staticmethod
-    def from_file(filename, extraneous='error'):
+    def from_file(filename, extraneous='warn'):
         """Returns a VicarImage object given the name of an existing VICAR file.
 
         Inputs:
