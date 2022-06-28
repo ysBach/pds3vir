@@ -245,13 +245,12 @@ class VicarImage():
 
         # Read the beginning of the VICAR file to get the label size
         file.seek(0)
-        header = str(file.read(40).decode('latin1'))            # Python 2 and 3
+        key, val = str(file.read(40).decode('latin1')).split(" ")[0].split("=")
 
-        if header[0:8] != "LBLSIZE=":
-            raise VicarError("Missing LBLSIZE keyword, file: " + filename)
+        if key != "LBLSIZE":
+            raise VicarError(f"Missing LBLSIZE keyword: {filename = }")
 
-        iblank = header.index(" ", 8)
-        vicar_LBLSIZE = int(header[8:iblank])
+        vicar_LBLSIZE = int(val)
         this.header_lblsize = vicar_LBLSIZE
 
         # Read the leading VICAR header
@@ -263,6 +262,7 @@ class VicarImage():
 
         # Interpret the header
         this._load_table(this.header)
+
 
         # Extract the basic VICAR file properties that we need
         vicar_FORMAT   = this.get_value("FORMAT" )
