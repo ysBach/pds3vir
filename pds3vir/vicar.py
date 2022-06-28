@@ -1066,7 +1066,7 @@ class VicarImage():
         # Finally, return the joined strings
         return "".join(result)
 
-    def as_dict(self):
+    def as_dict(self, to_float=True):
         """Returns a dictionary object containing the contents of the VICAR
         header. Note that information about the order of the fields is lost,
         and duplicated keywords just take on their last value. Decimal values
@@ -1076,8 +1076,8 @@ class VicarImage():
 
         mydict = {}
         for item in self.table:
-            if type(item[1]) == dec.Decimal:
-                value = float(item[1])
+            if to_float and type(item[1]) == dec.Decimal:
+                    value = float(item[1])
             else:
                 value = item[1]
 
