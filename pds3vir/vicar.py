@@ -321,23 +321,19 @@ class VicarImage():
         kind = np.dtype(dtypename).kind
 
         # Pre-pend the byte order character to the dtype name
+        byteorder = ""
         if kind in ("i", "u"):
             if itemsize > 1:
-                if vicar_INTFMT == "LOW":
-                    dtypename = "<" + dtypename
-                else:
-                    dtypename = ">" + dtypename
+                byteorder = "<" if vicar_INTFMT == "LOW" else ">"
         else:
-            if vicar_REALFMT == "IEEE":
-                dtypename = ">" + dtypename
-            elif vicar_REALFMT == "RIEEE":
-                dtypename = "<" + dtypename
-            else:
+            if vicar_REALFMT not in ("IEEE", "RIEEE"):
                 raise VicarError(
                     f"VAX real format '{vicar_REALFMT}' is not supported: {filename = }"
                 )
+            byteorder = "<" if vicar_REALFMT == "IEEE" else ">"
+            # other than IEEE/RIEEE have already raised VicarError above.
 
-        dtype = np.dtype(dtypename)
+        dtype = np.dtype(byteorder + dtypename)
 
         # Record size and prefix bytes must be multiples of the item size
         if vicar_RECSIZE % itemsize != 0:
