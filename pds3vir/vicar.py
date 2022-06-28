@@ -1,26 +1,3 @@
-################################################################################
-# vicar.py -- classes and methods to read and write VICAR image files.
-#
-# class VicarImage: Used to encapsulate a VICAR image.
-# class VicarError: The exception raised by errors related to the format or
-#                   content of a VICAR file.
-#
-# Mark R. Showalter, SETI Institute, June 2009
-# December 2011: Functions renamed to conform to our preferred style.
-#
-# 6/9/12 MRS - prevented an error that arises when EOL == 1 but no extension
-#   header is present.
-# 6/14/12 MRS - added as_dict() method.
-# 1/1/13 MRS - repaired bug where the extension header would not be parsed if
-#   the initial header ended in ASCII null characters.
-# 8/23/13 MRS - added support for returning binary headers, prefix bytes,
-#   the raw VICAR header, and the raw VICAR extension header, from input files.
-# 9/19/13 MRS - added method get_values().
-# 12/29/19 MRS - compatible with Python 3 as well as Python 2.
-# 12/30/21 MRS - added __contains__, xxx option for dealing with extraneous
-#   trailing bytes in Galileo SSI files.
-################################################################################
-
 import numpy as np
 import re
 import sys
@@ -422,11 +399,6 @@ class VicarImage():
         file.close()
         return this
 
-    @staticmethod
-    def FromFile(filename):
-        """Deprecated, alternative name for from_file()"""
-        return VicarImage.from_file(filename)
-
     ############################################################################
     # from_array: Create VicarImage object from a numpy ndarray
     ############################################################################
@@ -447,11 +419,6 @@ class VicarImage():
         this.is_from_file = False
 
         return this
-
-    @staticmethod
-    def FromArray(array):
-        """Deprecated, alternative name for from_array()"""
-        return VicarImage.from_array(array)
 
     ############################################################################
     # to_file(): Public Method to write a VICAR image file
@@ -483,9 +450,6 @@ class VicarImage():
 
         return
 
-    def ToFile(self, filename):
-        """Deprecated, alternative name for to_file()"""
-        return self.to_file(filename)
 
     ############################################################################
     # Public Methods for manipulating VICAR (keyword,value) pairs
@@ -1095,76 +1059,10 @@ class VicarImage():
 
         return mydict
 
-    def FindKeyword(self, keyword=".*", occurrence=0, start=0):
-        """Deprecated, alternative name for find_keyword()"""
-        return self.find_keyword(keyword, occurrence, start)
-
-    def KeywordIndex(self, keyword=".*", occurrence=0, start=0):
-        """Deprecated, alternative name for keyword_index()"""
-        return self.keyword_index(keyword, occurrence, start)
-
-    def KeywordCount(self):
-        """Deprecated, alternative name for keyword_count()"""
-        return self.keyword_count()
-
-    def GetValueByIndex(self, index):
-        """Deprecated, alternative name for get_value_by_index()"""
-        return self.get_value_by_index(index)
-
-    def SetValueByIndex(self, index, value, ignore=False, override=False):
-        """Deprecated, alternative name for set_value_by_index()"""
-        self.set_value_by_index(index, value, ignore, override)
-
-    def DeleteByIndex(self, index, stop=None, ignore=False, override=False):
-        """Deprecated, alternative name for delete_by_index()"""
-        self.delete_by_index(index, stop, ignore, override)
-
-    def CopyByIndex(self, destination, index, stop=None, ignore=False,
-                    override=False):
-        """Deprecated, alternative name for copy_by_index()"""
-        self.copy_by_index(destination, index, stop, ignore, override)
-
-    def InsertKeyword(self, keyword, value=None, index=-1, override=False):
-        """Deprecated, alternative name for insert_keyword()"""
-        self.insert_keyword(keyword, value, index, override)
-
-    def AppendKeyword(self, keyword, value=None, override=False):
-        """Deprecated, alternative name for append_keyword()"""
-        self.append_keyword(keyword, value, override)
-
-    def DeleteKeyword(self, keyword, occurrence=0, start=0, override=False):
-        """Deprecated, alternative name for delete_keyword()"""
-        self.delete_keyword(keyword, occurrence, start, override)
-
-    def GetValue(self, keyword=".*", occurrence=0, start=0, default=None):
-        """Deprecated, alternative name for get_value()"""
-        return self.get_value(keyword, occurrence, start, default)
-
-    def SetValue(self, keyword, value, occurrence=0, start=0, ignore=False,
-                                                              override=False):
-        """Deprecated, alternative name for set_value()"""
-        self.set_value(keyword, value, occurrence, start, ignore, override)
-
-    def GetHeader(self):
-        """Deprecated, alternative name for get_header()"""
-        return self.get_header()
 
     ############################################################################
     # Public Methods for manipulating VICAR array data
     ############################################################################
-
-    def get_3d_array(self):
-        """Returns the image data as a 3-D ndarray. Deprecated; just access
-        attribute data_3d."""
-
-        return self.data_3d
-
-    def get_2d_array(self):
-        """Returns the first band of the image as a 2-D ndarray. Deprecated;
-        just access attribute data_2d."""
-
-        return self.data_2d
-
     def set_array(self, array):
         """Replaces the array data in a VicarImage. It also updates all the
         descriptive parameters in the VICAR header.
@@ -1241,17 +1139,6 @@ class VicarImage():
 
         return
 
-    def Get3dArray(self):
-        """Deprecated, alternative name for get_3d_array()"""
-        return self.get_3d_array()
-
-    def Get2dArray(self):
-        """Deprecated, alternative name for get_2d_array()"""
-        return self.get_2d_array()
-
-    def SetArray(self, array):
-        """Deprecated, alternative name for set_array()"""
-        self.set_array(array)
 
     ############################################################################
     # Private methods
