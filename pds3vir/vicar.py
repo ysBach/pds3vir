@@ -283,8 +283,7 @@ class VicarImage():
 
         # Interpret image properties
         if vicar_TYPE != "IMAGE":
-            raise VicarError("VICAR file does not contain an image, file: "
-                             + filename)
+            raise VicarError(f"VICAR file does not contain an image: {filename = }")
 
         # Append the extension header, if present, and re-load the table
         this.extension_bytes = b""
@@ -301,8 +300,7 @@ class VicarImage():
 
         if vicar_EOL != 0:
             if temp[0:8] != "LBLSIZE=":
-                raise VicarError("Missing LBLSIZE keyword in extension, file: "
-                                 + filename)
+                raise VicarError(f"Missing LBLSIZE keyword in extension: {filename = }")
 
             iblank = temp.index(" ", 8)
             this.extension_lblsize = int(temp[8:iblank])
@@ -335,8 +333,9 @@ class VicarImage():
             elif vicar_REALFMT == "RIEEE":
                 dtypename = "<" + dtypename
             else:
-                raise VicarError("VAX real format is not supported, file: "
-                                 + filename)
+                raise VicarError(
+                    f"VAX real format '{vicar_REALFMT}' is not supported: {filename = }"
+                )
 
         dtype = np.dtype(dtypename)
 
@@ -364,11 +363,9 @@ class VicarImage():
             if extraneous in ('warn', 'print'):
                 trailing = vector[recs*samples:]
                 if np.all(trailing == 0):
-                    message = ('%s has %d zero-valued trailing items' %
-                               (filename, len(trailing)))
+                    message = (f'{filename} has {trailing:d} zero-valued trailing items')
                 else:
-                    message = ('%s has %d trailing items' %
-                               (filename, len(trailing)))
+                    message = (f'{filename} has {trailing:d} trailing items')
 
                 if extraneous == 'print':
                     print(message)
