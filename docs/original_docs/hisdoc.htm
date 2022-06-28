@@ -1,0 +1,59 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="Microsoft Word 81.2">
+<TITLE>Galileo SSI G28 HIS Anomaly Description and Recovery Algorithm</TITLE>
+</HEAD>
+<BODY>
+
+<B><FONT SIZE=4><P ALIGN="CENTER">Galileo SSI G28 HIS Anomaly Description and Recovery Algorithm</P>
+</B></FONT><P ALIGN="CENTER"></P>
+<P>&nbsp;</P>
+<P>The SSI HIS summation-mode readout anomaly observed in G28 is identical to that observed in the AI8 summation-mode in I24 with the differences in the character of the resulting images completely explained by the differences in the line readout timing between HIS and AI8.</P>
+
+<P>Both the AI8 and HIS readout modes involve reading out two vertically summed line-pairs in a single sub-RTI time period (8 1/3 ms).  The summation-mode anomaly observed since I24 causes only one serial pixel transfer to occur rather than the intended two for every two serial clock cycles.  Thus, only approximately the first 400 samples of each vertically summed line pair are readout before the next vertical transfer pair occurs, and the left and right halves of the images get combined during readout.</P>
+
+<P>The difference between HIS and AI8 is that in HIS the ADC operation, the capture of pixel values, and the next vertical transfer operation are all inhibited for 7 sub-RTIs after each sub-RTI in which parallel transfers and pixel sampling and capture are enabled.  In AI8, on the other hand, vertical transfers and pixel sampling are enabled continuously in every sub-RTI.  However, even when the pixel sampling and vertical transfers are inhibited as in the HIS mode, the serial register is still clocked continuously, and any charge remaining in the serial register from the anomalous incomplete previous serial transfer is swept out and discarded.  Thus, in HIS the combining of the left and right halves of the images only occurs on every other readout line (the second one read out in the active sub-RTI) resulting in odd line pixels having the equivalent of two original CCD pixels worth of charge (2 rows, 1 column) and the even line pixels having the equivalent of four (2 lefthand rows, 1 column, plus 2 righthand rows, 1 column).  </P>
+
+<P>The mapping of the original image pixels on the CCD to the HIS output images is as follows:</P>
+
+<P>Line 1 and subsequent odd lines &#151;</P>
+<DIR>
+<DIR>
+
+<P>Samples 1 &#151; 13 are from the extended pixel region of the CCD serial register and contain no valid charge</P>
+
+<P>Samples 14 &#151; 400 are the charge packets from CCD lines 1+2, 5+6 (line 3), 9+10 (line 5), etc., columns 1 &#151; 387 (not summed horizontally)</P>
+</DIR>
+</DIR>
+
+<P>Line 2 and subsequent even lines &#151;</P>
+<DIR>
+<DIR>
+
+<P>Samples 1 &#151; 13 are the charge packets from CCD lines 1+2, 5+6 (line 4), 9+10 (line 6), etc., columns 401 &#151; 413 (not summed horizontally)</P>
+
+<P>Samples 14 &#151; 400 are the charge packets from CCD lines 1+2, 5+6 (line 4), 9+10 (line 6), etc., columns 414 &#151; 800 (not summed horizontally) plus those from CCD lines 3+4, 7+8 (line 4), 11+12 (line 6), etc., columns 1 &#151; 387 (not summed horizontally)</P>
+</DIR>
+</DIR>
+
+<P>All odd lines are like line 1 in the anomalous AI8 images, and all even lines are like the anomalous AI8 even lines.  The 7-pixel offset seen in AI8 odd lines (except for line 1) is not seen because the effect is wiped out by the clearing of the serial register between each pair of lines read out in HIS.  All odd lines have the correct DN values except they are shifted 13 samples to the right of where they belong and have not been horizontally summed.  They are an accurate representation of the left half of the image.  For all even lines, the first 13 samples belong at the end of the previous odd line after a 13-sample gap.  The next 387 samples in even lines are combinations of the right side of the previous line-pair and the left side of the current line-pair.  The original image can be reconstructed quite accurately simply by;</P>
+
+<OL>
+
+<OL>
+
+<LI>moving samples 1 to 13 from each even line to samples 414 to 426 of the previous odd line</LI>
+<LI>shifting the entire image 13 samples to the left.</LI>
+<LI>interpolating between the odd lines (samples 1 to 387 only)</LI>
+<LI>subtracting the interpolated value from the intervening even line,</LI>
+<LI>placing the resulting differenced samples at the right-hand end of the previous odd line (starting at sample 414) and leaving the interpolated values in samples 1 to 387 of the intervening even line</LI>
+<LI>interpolating between the new values in samples 401 to 800 of the odd lines to fill in the missing even lines on the right side of the image</LI>
+<LI>replicating each line (or interpolating) to restore the proper aspect ratio</LI></OL>
+</OL>
+
+
+<P>This procedure will produce a complete frame except for a vertical column gap in samples 388 &#151; 400.  This reconstruction should be much more accurate than is possible for the AI8 images since the DN values in every other line are perfectly correct (except for the lack of horizontal summing).</P>
+
+<P>Note also that the error due to a shifting Baseline Stabilization value is much less in the HIS mode since the BLS circuit will sense zero-DN pixels (as intended) during 7 out of 8 sub-RTIs, so given the BLS time constant, the reference offset value will change very little during frame readout.</P></BODY>
+</HTML>

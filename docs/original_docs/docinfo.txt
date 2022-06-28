@@ -1,0 +1,59 @@
+PDS_VERSION_ID                = PDS3
+RECORD_TYPE                   = STREAM
+OBJECT                        = TEXT
+  PUBLICATION_DATE            = 2002-09-01
+  NOTE                        = "Description of the DOCUMENT
+     directory contents for the Galileo Jupiter Orbital Operations
+     Solid State Imaging Raw EDR CD-ROMs (volumes GO_0017 thru
+     GO_0023)"
+END_OBJECT                    = TEXT
+END
+
+
+                   DOCUMENT Directory Contents
+
+     The DOCUMENT directory contains documentation files for the
+Galileo Solid State Imaging Raw EDR CD-ROM.  The following files are found
+in this directory.
+
+DOCINFO.TXT  - The file you are reading.
+
+CDVOLSIS.LBL - Description of the format and content specifications of
+               the SSI Raw EDR CD-ROM.
+
+CDVOLSIS.HTM - Software Interface Specification document for this
+               CD-ROM archive volume.
+
+CDVOLSIS.PDF - Acrobat PDF of the CD-ROM Software Interface
+               Specification document (requires Version 3.0 reader).
+
+REDRSIS.LBL  - Description of the format and delivery specifications of
+               the SSI Raw EDR.
+
+REDRSIS.HTM  - Software Interface Specification document for the
+               Raw EDR.
+
+REDRSIS.PDF  - Acrobat PDF of the Raw EDR Software Interface
+               Specification document (requires Version 3.0 reader).
+
+BADDATA.TXT  - Memorandum describing the format and content of the bad data
+               value header of the Raw EDR images.
+
+VICAR2.TXT   - Description of the organization and content of the SSI
+               flight label for Raw EDR images.
+
+PDSLABEL.TXT - Description of PDS label.
+
+HISDOC.PDF   - Adobe Acrobat PDF of the SSI camera HIS anomaly
+               and correction algorithm document (requires 
+               Version 3.0 reader).
+
+HISDOC.HTM   - HTML version of the SSI camera HIS anomaly and
+               correction algorithm document.
+
+HISDOC.LBL   - A detached PDS label describing the SSI camera HIS
+               anomaly and correction algorithm document.
+               
+
+
+

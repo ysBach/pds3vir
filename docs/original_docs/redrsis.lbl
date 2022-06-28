@@ -1,0 +1,29 @@
+PDS_VERSION_ID                     = PDS3
+RECORD_TYPE                        = STREAM
+^HTML_DOCUMENT                     = "REDRSIS.HTM"
+^PDF_DOCUMENT                      = "REDRSIS.PDF"
+OBJECT                             = HTML_DOCUMENT
+  DOCUMENT_NAME                    = "
+    Galileo Software Interface Specification, SSI Raw Experiment Data
+    Record (REDR) for Phase 2"
+  PUBLICATION_DATE                 = 1997-09-25
+  DOCUMENT_TOPIC_TYPE              = "SOFTWARE INTERFACE SPECIFICATION"
+  INTERCHANGE_FORMAT               = ASCII
+  DOCUMENT_FORMAT                  = TEXT
+  DESCRIPTION                      = "Describes the format and delivery
+    specifications of the SSI REDR."
+END_OBJECT                         = HTML_DOCUMENT
+
+OBJECT                             = PDF_DOCUMENT
+  DOCUMENT_NAME                    = "
+    Galileo Software Interface Specification, SSI Raw Experiment Data
+    Record (REDR) for Phase 2"
+  PUBLICATION_DATE                 = 1998-02-25
+  DOCUMENT_TOPIC_TYPE              = "SOFTWARE INTERFACE SPECIFICATION"
+  INTERCHANGE_FORMAT               = BINARY
+  DOCUMENT_FORMAT                  = ADOBE_PDF
+  DESCRIPTION                      = "Describes the format and delivery
+    specifications of the SSI REDR."
+END_OBJECT                         = PDF_DOCUMENT
+END
+

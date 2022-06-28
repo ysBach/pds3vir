@@ -1,0 +1,28 @@
+PDS_VERSION_ID                     = PDS3
+RECORD_TYPE                        = STREAM
+^HTML_DOCUMENT                     = "CDVOLSIS.HTM"
+^PDF_DOCUMENT                      = "CDVOLSIS.PDF"
+OBJECT                             = HTML_DOCUMENT
+  DOCUMENT_NAME                    = "
+    Galileo Software Interface Specification, SSI Raw Experiment Data
+    Record Compact Disc - Read Only Memory (REDR CD-ROM)"
+  PUBLICATION_DATE                 = 1997-11-01
+  DOCUMENT_TOPIC_TYPE              = "SOFTWARE INTERFACE SPECIFICATION"
+  INTERCHANGE_FORMAT               = ASCII
+  DOCUMENT_FORMAT                  = TEXT
+  DESCRIPTION                      = "Describes the format and content
+    specifications of the SSI REDR CD-ROM."
+END_OBJECT                         = HTML_DOCUMENT
+
+OBJECT                             = PDF_DOCUMENT
+  DOCUMENT_NAME                    = "
+    Galileo Software Interface Specification, SSI Raw Experiment Data
+    Record Compact Disc - Read Only Memory (REDR CD-ROM)"
+  PUBLICATION_DATE                 = 1997-11-01
+  DOCUMENT_TOPIC_TYPE              = "SOFTWARE INTERFACE SPECIFICATION"
+  INTERCHANGE_FORMAT               = BINARY
+  DOCUMENT_FORMAT                  = ADOBE_PDF
+  DESCRIPTION                      = "Describes the format and content
+    specifications of the SSI REDR CD-ROM."
+END_OBJECT                         = PDF_DOCUMENT
+END

@@ -1,0 +1,31 @@
+PDS_VERSION_ID                     = PDS3
+RECORD_TYPE                        = STREAM
+^HTML_DOCUMENT                     = "HISDOC.HTM"
+^PDF_DOCUMENT                      = "HISDOC.PDF"
+OBJECT                             = HTML_DOCUMENT
+  DOCUMENT_NAME                    = "
+    Galileo SSI G28 HIS Anomaly Description and Recovery Algorithm"
+  PUBLICATION_DATE                 = 2001-02-15
+  DOCUMENT_TOPIC_TYPE              = "DATA RECOVERY TECHNIQUES AND ANALYSIS"
+  INTERCHANGE_FORMAT               = ASCII
+  DOCUMENT_FORMAT                  = TEXT
+  DESCRIPTION                      = "Describes the camera telemetry mode 
+                                      HIS anomalies and the correction 
+                                      algorithm during Orbit 28 Ganymede
+                                      encounter." 
+END_OBJECT                         = HTML_DOCUMENT
+
+OBJECT                             = PDF_DOCUMENT
+  DOCUMENT_NAME                    = "
+    Galileo SSI G28 HIS Anomaly Description and Recovery Algorithm"
+  PUBLICATION_DATE                 = 2001-02-15
+  DOCUMENT_TOPIC_TYPE              = "DATA RECOVERY TECHNIQUES AND ANALYSIS"
+  INTERCHANGE_FORMAT               = BINARY
+  DOCUMENT_FORMAT                  = ADOBE_PDF
+  DESCRIPTION                      = "Describes the camera telemetry mode
+                                      HIS anomalies and the correction
+                                      algorithm during Orbit 28 Ganymede
+                                      encounter."
+END_OBJECT                         = PDF_DOCUMENT
+END
+

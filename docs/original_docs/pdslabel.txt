@@ -1,0 +1,51 @@
+CCSD3ZF0000100000001NJPL3IF0PDS200000001 = SFDU_LABEL
+RECORD_TYPE                     = STREAM
+SPACECRAFT_NAME                 = "GALILEO ORBITER"
+OBJECT                          = TEXT
+    PUBLICATION_DATE            = 2002-09-01
+NOTE                            = "PDS LABEL DESCRIPTION"
+END_OBJECT
+END
+
+
+    PDS labels are object-oriented.  The object to which the label
+refers (e.g. IMAGE, TABLE, etc.) is denoted by a statement of the form:
+
+    ^object = location
+
+in which the carat character (^, also called a pointer in this context)
+indicates that the object starts at the given location.  In an embedded
+label, the location is an integer representing the starting record
+number of the object (the first record in the file is record 1).  In a
+detached label, the location denotes the name of the file containing the
+object, along with the starting record or byte number if there is more
+than one object.  For example:
+
+    ^IMAGE_HEADER = ("XXXXX.IMG",1)
+    ^IMAGE = ("XXXXX.IMG",3)
+
+indicates that the IMAGE object begins at record 3 of the file XXXXX.IMG,
+in the same directory as the detached label file.  Below is an example
+taken from a pds label on this disc showing the ^object definitions.
+
+    ^IMAGE = ("XXXXX.IMG",n)
+    ^IMAGE_HEADER = ("XXXXX.IMG",n)
+    ^TELEMETRY_TABLE = ("XXXXX.IMG",n)
+    ^BAD_DATA_VALUES_HEADER = ("XXXXX.IMG",n)
+    ^IMAGE = ("XXXXX.IMG",n)
+    ^LINE_PREFIX_TABLE = ("XXXXX.IMG",n)
+    ^LINE_PREFIX_STRUCTURE = "RLINEPRX.FMT"
+    ^DESCRIPTION = "VICAR2.TXT"
+    ^STRUCTURE = "RTLMTAB.FMT"
+    ^DESCRIPTION = "BADDATA.TXT"
+
+
+where
+
+    n is the starting byte number of the object, counting from
+        the beginning of the file (record 1, byte 1)
+
+    XXXXX.IMG is the upper-case file name
+
+    RTLMTAB.FMT, RLINEPRX.FMT, VICAR2.TXT, BADDATA.TXT are 
+    format files describing the structure of the objects
