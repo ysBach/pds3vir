@@ -301,7 +301,6 @@ class VicarImage():
             if len(temp) == 0:
                 vicar_EOL = 0
 
-        if vicar_EOL != 0:
             if temp[0:8] != "LBLSIZE=":
                 raise VicarError(f"Missing LBLSIZE keyword in extension: {filename = }")
 
