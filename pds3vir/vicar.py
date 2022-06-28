@@ -237,8 +237,9 @@ class VicarImage():
         """
 
         if extraneous not in ('error', 'warn', 'print', 'ignore'):
-            raise ValueError('unrecognized value for extraneous option: ' +
-                             extraneous)
+            raise ValueError(
+                f"unrecognized value for extraneous option: {extraneous}"
+            )
 
         # Create the object
         this = VicarImage()
@@ -603,7 +604,7 @@ class VicarImage():
 
         # If the keyword was never matched, raise KeyError
         if found < 0:
-            raise KeyError("No keyword found matching \"" + keyword + '"')
+            raise KeyError(f'No keyword found matching "{keyword}"')
 
         # If there is no keyword, it's an index error
         if keyword == ".*":
@@ -612,9 +613,9 @@ class VicarImage():
         # Otherwise, it's a value error
         message = "Missing keyword " + keyword
         if occurrence != 0:
-            message = message + "[" + str(occurrence) + "]"
+            message = f"{message} [{str(occurrence)}]"
         if start != 0:
-            message = message + " starting at index " + str(start)
+            message = f"{message} starting at index {str(start)}"
 
         raise ValueError(message)
 
@@ -657,8 +658,9 @@ class VicarImage():
         # Raise an error if necessary
         immutable = self.table[index][0] in IMMUTABLE_KEYWORDS
         if immutable and (not override) and (not ignore):
-            raise VicarError("The value of keyword " + self.table[index][0]
-                             + " cannot be changed by the user")
+            raise VicarError(
+                f"The value of keyword {self.table[index][0]} cannot be changed by the user"
+            )
 
         # Ignore the error if necessary
         if immutable and ignore:
@@ -713,8 +715,9 @@ class VicarImage():
         if not ignore:
             for i in range(index, stop):
                 if self.table[i][0] in REQUIRED_KEYWORDS:
-                    raise VicarError("Required keyword " + self.table[i][0] +
-                                     " cannot be deleted")
+                    raise VicarError(
+                        f"Required keyword {self.table[i][0]} cannot be deleted"
+                    )
 
         # Delete the un-required keywords in reverse order
         for i in range(stop-1, index-1, -1):
@@ -760,8 +763,7 @@ class VicarImage():
             for i in range(index, count):
                 keyword = self.table[i][0]
                 if keyword in IMMUTABLE_KEYWORDS:
-                    raise VicarError("Keyword " + keyword +
-                                     " cannot be modified")
+                    raise VicarError(f"Keyword {keyword} cannot be modified")
 
         # Copy one by one
         for i in range(index, count):
@@ -802,8 +804,7 @@ class VicarImage():
         # Make sure this keyword can be inserted
         if not override:
             if keyword.upper() in IMMUTABLE_KEYWORDS:
-                raise VicarError("Required keyword " + keyword.upper()
-                                 + " cannot be inserted")
+                raise VicarError(f"Required keyword {keyword.upper()} cannot be inserted")
 
         # Convert tuples to lists
         if isinstance(value, tuple):
@@ -832,8 +833,7 @@ class VicarImage():
         # Make sure this keyword can be inserted
         if not override:
             if keyword.upper() in IMMUTABLE_KEYWORDS:
-                raise VicarError("Required keyword " + keyword.upper()
-                                 + " cannot be appended")
+                raise VicarError(f"Required keyword {keyword.upper()} cannot be appended")
 
         # Convert tuples to lists
         if isinstance(value, tuple):
@@ -1005,8 +1005,9 @@ class VicarImage():
             if isinstance(value, numbers.Real):
                 return repr(value)
 
-            raise VicarError("Illegal value type for a VICAR keyword: " +
-                             str(value) + " (" + str(type(value)) + ")")
+            raise VicarError(
+                f"Illegal value type for a VICAR keyword: {str(value)} ({str(type(value))})"
+            )
 
         # Actual method begins here
         # Prepare the header string as a list of short strings, then join them
