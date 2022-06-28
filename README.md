@@ -1,7 +1,9 @@
 # pds3vir
 An extremely simple PDS3 format "VICAR .img file reader" (vir).
 
-Currently this repo contains effectively only one python file, vicar.py, which is heavily inherited from [``SETI/pds-tools/vicar.py``](https://github.com/SETI/pds-tools) (permalink for the specific commit: [@21dc09c](https://github.com/SETI/pds-tools/blob/3690697fa166a686d6526f195567f180c7593543/vicar.py#L1)). The initial
+Currently this repo contains effectively only one python file, vicar.py, which is heavily inherited from [``SETI/pds-tools/vicar.py``](https://github.com/SETI/pds-tools) (permalink for the specific commit: [@21dc09c](https://github.com/SETI/pds-tools/blob/3690697fa166a686d6526f195567f180c7593543/vicar.py#L1)).
+
+It is made for an intern research topic, using Galileo spacecraft data.
 
 Few differences:
 - **Requires python 3.8 or later**
