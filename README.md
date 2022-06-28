@@ -33,7 +33,13 @@ from matplotlib import pyplot as plt
 import pds3vir as pds3
 
 lblpaths = list(Path("pdsimage2.wr.usgs.gov/").glob("**/*.lbl"))
-pds = pds3.open_pds3(lblpaths[0], vicar=True)
+pds = pds3.open_pds3(lblpaths[0])
+#                             ^^^^^
+# you can try options such as
+#   pds3.open_pds3(lblpaths[0], vicar=False)
+# to get wrong result, and
+#   pds3.open_pds3(lblpaths[0], cut=False)
+# to get the full image with many 0
 
 fig, axs = plt.subplots(1, 1, figsize=(5, 5), sharex=False, sharey=False, gridspec_kw=None)
 
@@ -47,6 +53,11 @@ for h in ["image_id", "image_time", "target_name", "filter_name",
           "phase_angle"]:
     print(f"{h.upper():>20s}: {pds.label[h.upper()]}")
 ```
+
+One of the examples:
+![](examples/ex01.png)
+
+
 
 ## General Usage
 To extract all the informations from every ``.lbl`` files:
