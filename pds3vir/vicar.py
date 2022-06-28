@@ -267,7 +267,6 @@ class VicarImage():
         # Interpret the header
         this._load_table(this.header)
 
-
         # Extract the basic VICAR file properties that we need
         vicar_FORMAT   = this.get_value("FORMAT" )
         vicar_TYPE     = this.get_value("TYPE"   )
