@@ -5,6 +5,10 @@ import decimal as dec
 import numbers
 import warnings
 
+
+__all__ = ["VicarImage"]
+
+
 # A dictionary to translate from VICAR FORMAT values to equivalent Python
 # dtypes.
 FORMAT_DICT = { "BYTE" : "u1",
