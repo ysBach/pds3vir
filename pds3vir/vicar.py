@@ -301,6 +301,7 @@ class VicarImage():
             if len(temp) == 0:
                 vicar_EOL = 0
 
+        if vicar_EOL != 0:
             if temp[0:8] != "LBLSIZE=":
                 raise VicarError(f"Missing LBLSIZE keyword in extension: {filename = }")
 
@@ -310,9 +311,7 @@ class VicarImage():
             file.seek(offset)
             this.extension_bytes = file.read(this.extension_lblsize)
 
-            this.header += \
-                str(this.extension_bytes.rstrip(b"\0").decode('latin1'))
-            # Python 2 and 3
+            this.header += str(this.extension_bytes.rstrip(b"\0").decode('latin1'))
             this._load_table(this.header)
 
         # Look up the numpy dtype corresponding to the VICAR FORMAT
@@ -379,11 +378,9 @@ class VicarImage():
         left_pix = vicar_NBB // itemsize
 
         data_recs = vicar_N2 * vicar_N3
-        this.prefix_2d = records[top_recs : top_recs + data_recs,
-                                 : left_pix]
+        this.prefix_2d = records[top_recs:top_recs+data_recs, :left_pix]
 
-        this.data_2d = records[top_recs : top_recs + data_recs,
-                               left_pix : left_pix + vicar_N1]
+        this.data_2d = records[top_recs:top_recs+data_recs, left_pix:left_pix+vicar_N1]
 
         # Reshape to separate the bands
         this.data_3d = this.data_2d.reshape((vicar_N3, vicar_N2, vicar_N1))
