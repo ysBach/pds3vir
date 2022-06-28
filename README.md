@@ -85,3 +85,4 @@ df = pd.read_csv("cumindex.tab", names=cols)
 df = df.replace(["N/A", "UNK"], value=np.nan, regex=True)
 df.to_csv("cumindex.csv", index=False)
 ```
+**NOTE**: ``cumindex`` means the cumulative index, since GO_0017. Therefore, you must use ``cumindex`` in the last folder, i.e., GO_0023.
