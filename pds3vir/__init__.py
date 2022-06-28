@@ -1,1 +1,1 @@
-from vicar import *
+from .vicar import *

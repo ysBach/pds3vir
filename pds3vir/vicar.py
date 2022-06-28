@@ -362,9 +362,9 @@ class VicarImage():
             if extraneous in ('warn', 'print'):
                 trailing = vector[recs*samples:]
                 if np.all(trailing == 0):
-                    message = (f'{filename} has {trailing:d} zero-valued trailing items')
+                    message = (f'{filename} has {len(trailing):d} zero-valued trailing items')
                 else:
-                    message = (f'{filename} has {trailing:d} trailing items')
+                    message = (f'{filename} has {len(trailing):d} trailing items')
 
                 if extraneous == 'print':
                     print(message)
