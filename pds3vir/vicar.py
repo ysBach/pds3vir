@@ -18,29 +18,29 @@ FORMAT_DICT = { "BYTE" : "u1",
 
 # A dictionary to translate from Python dtypes (kind,itemsize) to their
 # equivalent VICAR FORMAT values.
-DTYPE_DICT = { ("u",1) : "BYTE",
-                ("i",2) : "HALF",
-                ("i",4) : "FULL",
-                ("f",4) : "REAL",
-                ("f",8) : "DOUB",
-                ("c",8) : "COMP" }
+DTYPE_DICT = { ("u", 1) : "BYTE",
+               ("i", 2) : "HALF",
+               ("i", 4) : "FULL",
+               ("f", 4) : "REAL",
+               ("f", 8) : "DOUB",
+               ("c", 8) : "COMP" }
 
 # A dictionary of Python (platform,byteorder) values types paired with their
 # equivalent VICAR HOST values.
 HOST_DICT = { ("sunos3", "big"   ) : "SUN-3",
-                ("sunos4", "big"   ) : "SUN-4",
-                ("sunos5", "big"   ) : "SUN-SOLR",
-                ("sunos5", "little") : "X86-LINUX",
-                ("darwin", "big"   ) : "MAC-OSX",
-                ("darwin", "little") : "MAC-OSX",
-                ("linux2", "little") : "X86-LINUX",
-                ("win32" , "little") : "WIN-XP"     }
+              ("sunos4", "big"   ) : "SUN-4",
+              ("sunos5", "big"   ) : "SUN-SOLR",
+              ("sunos5", "little") : "X86-LINUX",
+              ("darwin", "big"   ) : "MAC-OSX",
+              ("darwin", "little") : "MAC-OSX",
+              ("linux2", "little") : "X86-LINUX",
+              ("win32" , "little") : "WIN-XP"     }
 
 # A dictionary of Python byteorder values types paired with their
 # equivalent VICAR INTFMT and REALFMT values. These are the byteorders
 # returned by sys.byteorder
 SYS_BYTEORDER_DICT = { "little" : ("LOW" , "RIEEE"),
-                        "big"    : ("HIGH", "IEEE" ) }
+                       "big"    : ("HIGH", "IEEE" ) }
 
 # These are the byteorders returned by numpy.dtype.byteorder
 INTFMT_REALFMT_DICT = { "<" : ("LOW" , "RIEEE"),
@@ -50,54 +50,55 @@ INTFMT_REALFMT_DICT = { "<" : ("LOW" , "RIEEE"),
 
 # Categories of keywords
 REQUIRED_KEYWORDS = ["LBLSIZE" ,
-                        "FORMAT"  ,
-                        "TYPE"    ,
-                        "BUFSIZ"  ,
-                        "DIM"     ,
-                        "EOL"     ,
-                        "RECSIZE" ,
-                        "ORG"     ,
-                        "NL"      ,
-                        "NS"      ,
-                        "NB"      ,
-                        "N1"      ,
-                        "N2"      ,
-                        "N3"      ,
-                        "N4"      ,
-                        "NBB"     ,
-                        "NLB"     ,
-                        "HOST"    ,
-                        "INTFMT"  ,
-                        "REALFMT" ,
-                        "BHOST"   ,
-                        "BINTFMT" ,
-                        "BREALFMT",
-                        "BLTYPE"  ]
+                     "FORMAT"  ,
+                     "TYPE"    ,
+                     "BUFSIZ"  ,
+                     "DIM"     ,
+                     "EOL"     ,
+                     "RECSIZE" ,
+                     "ORG"     ,
+                     "NL"      ,
+                     "NS"      ,
+                     "NB"      ,
+                     "N1"      ,
+                     "N2"      ,
+                     "N3"      ,
+                     "N4"      ,
+                     "NBB"     ,
+                     "NLB"     ,
+                     "HOST"    ,
+                     "INTFMT"  ,
+                     "REALFMT" ,
+                     "BHOST"   ,
+                     "BINTFMT" ,
+                     "BREALFMT",
+                     "BLTYPE"  ]
 
 IMMUTABLE_KEYWORDS = ["LBLSIZE" ,
-                        "FORMAT"  ,
-                        "TYPE"    ,
-                        "DIM"     ,
-                        "EOL"     ,
-                        "RECSIZE" ,
-                        "ORG"     ,
-                        "NL"      ,
-                        "NS"      ,
-                        "NB"      ,
-                        "N1"      ,
-                        "N2"      ,
-                        "N3"      ,
-                        "N4"      ,
-                        "NBB"     ,
-                        "NLB"     ,
-                        "INTFMT"  ,
-                        "REALFMT" ,
-                        "BINTFMT" ,
-                        "BREALFMT"]
+                      "FORMAT"  ,
+                      "TYPE"    ,
+                      "DIM"     ,
+                      "EOL"     ,
+                      "RECSIZE" ,
+                      "ORG"     ,
+                      "NL"      ,
+                      "NS"      ,
+                      "NB"      ,
+                      "N1"      ,
+                      "N2"      ,
+                      "N3"      ,
+                      "N4"      ,
+                      "NBB"     ,
+                      "NLB"     ,
+                      "INTFMT"  ,
+                      "REALFMT" ,
+                      "BINTFMT" ,
+                      "BREALFMT"]
 
 ################################################################################
 # VicarError class
 ################################################################################
+
 
 class VicarError(Exception):
     pass
@@ -164,8 +165,6 @@ class VicarImage():
         - Files written by to_file() must use "BSQ" (band-sequential)
           organization.
     """
-
-
 
     ############################################################################
     # Constructor
@@ -260,7 +259,7 @@ class VicarImage():
         this.header_bytes = file.read(vicar_LBLSIZE)
 
         this.header = str(this.header_bytes.rstrip(b"\0").decode('latin1'))
-                                                                # Python 2 and 3
+        # Python 2 and 3
 
         # Interpret the header
         this._load_table(this.header)
@@ -305,7 +304,7 @@ class VicarImage():
                 raise VicarError("Missing LBLSIZE keyword in extension, file: "
                                  + filename)
 
-            iblank = temp.index(" ",8)
+            iblank = temp.index(" ", 8)
             this.extension_lblsize = int(temp[8:iblank])
 
             file.seek(offset)
@@ -313,7 +312,7 @@ class VicarImage():
 
             this.header += \
                 str(this.extension_bytes.rstrip(b"\0").decode('latin1'))
-                                                                # Python 2 and 3
+            # Python 2 and 3
             this._load_table(this.header)
 
         # Look up the numpy dtype corresponding to the VICAR FORMAT
@@ -386,7 +385,7 @@ class VicarImage():
 
         data_recs = vicar_N2 * vicar_N3
         this.prefix_2d = records[top_recs : top_recs + data_recs,
-                                          : left_pix]
+                                 : left_pix]
 
         this.data_2d = records[top_recs : top_recs + data_recs,
                                left_pix : left_pix + vicar_N1]
@@ -399,12 +398,12 @@ class VicarImage():
         # Re-position the band axis as first. The returned array is always
         # ordered (bands, lines, samples).
         if vicar_ORG == "BIP":
-            this.data_3d = this.data_3d.rollaxis(2,0)
-            this.prefix_3d = this.prefix_3d.rollaxis(2,0)
+            this.data_3d = this.data_3d.rollaxis(2, 0)
+            this.prefix_3d = this.prefix_3d.rollaxis(2, 0)
 
         elif vicar_ORG == "BIL":
-            this.data_3d = this.data_3d.rollaxis(1,0)
-            this.prefix_3d = this.prefix_3d.rollaxis(1,0)
+            this.data_3d = this.data_3d.rollaxis(1, 0)
+            this.prefix_3d = this.prefix_3d.rollaxis(1, 0)
 
         file.close()
         return this
@@ -460,7 +459,6 @@ class VicarImage():
 
         return
 
-
     ############################################################################
     # Public Methods for manipulating VICAR (keyword,value) pairs
     ############################################################################
@@ -473,7 +471,7 @@ class VicarImage():
             return self.get_value(keyword=key)
         if isinstance(key, numbers.Integral):
             return self.get_value(occurrence=key)
-        if isinstance(key, (list,tuple)):
+        if isinstance(key, (list, tuple)):
             if len(key) != 2:
                 raise ValueError("Tuple must contain keyword and index")
             return self.get_value(keyword=key[0], occurrence=key[1])
@@ -487,7 +485,7 @@ class VicarImage():
         if isinstance(key, numbers.Integral):
             i = self.keyword_index(occurrence=key)
             self.set_value_by_index(i, value)
-        if isinstance(key, (list,tuple)):
+        if isinstance(key, (list, tuple)):
             if len(key) != 2:
                 raise ValueError("Tuple must contain keyword and index")
             i = self.keyword_index(keyword=key[0], occurrence=key[1])
@@ -502,7 +500,7 @@ class VicarImage():
         if isinstance(key, numbers.Integral):
             i = self.keyword_index(occurrence=key)
             self.delete_by_index(i)
-        if isinstance(key, (list,tuple)):
+        if isinstance(key, (list, tuple)):
             if len(key) != 2:
                 raise ValueError("Tuple must contain keyword and index")
             i = self.keyword_index(keyword=key[0], occurrence=key[1])
@@ -515,7 +513,7 @@ class VicarImage():
             return self.find_keyword(key) >= 0
         if isinstance(key, numbers.Integral):
             return key >= 0 and key < self.keyword_count()
-        if isinstance(key, (list,tuple)):
+        if isinstance(key, (list, tuple)):
             if len(key) != 2:
                 raise ValueError("Tuple must contain keyword and index")
             return self.find_keyword(keyword=key[0], occurrence=key[1]) >= 0
@@ -553,14 +551,16 @@ class VicarImage():
             # Test this pattern
             k = self.table[i][0]
             test = pattern.match(k)
-            if test is None: continue
+            if test is None:
+                continue
 
             # If it matches the entire keyword...
             if test.end() == len(k):
                 found = found + 1
 
                 # And the occurrence is right, we're done
-                if found == occurrence: return i
+                if found == occurrence:
+                    return i
 
             # Otherwise, try again
 
@@ -597,14 +597,16 @@ class VicarImage():
             # Test this pattern
             k = self.table[i][0]
             test = pattern.match(k)
-            if test is None: continue
+            if test is None:
+                continue
 
             # If it matches the entire keyword...
             if test.end() == len(k):
                 found = found + 1
 
                 # And the occurrence is right, we're done
-                if found == occurrence: return i
+                if found == occurrence:
+                    return i
 
             # Otherwise, try again
 
@@ -620,8 +622,10 @@ class VicarImage():
 
         # Otherwise, it's a value error
         message = "Missing keyword " + keyword
-        if occurrence != 0: message = message + "[" + str(occurrence) + "]"
-        if start != 0: message = message + " starting at index " + str(start)
+        if occurrence != 0:
+            message = message + "[" + str(occurrence) + "]"
+        if start != 0:
+            message = message + " starting at index " + str(start)
 
         raise ValueError(message)
 
@@ -665,13 +669,15 @@ class VicarImage():
         immutable = self.table[index][0] in IMMUTABLE_KEYWORDS
         if immutable and (not override) and (not ignore):
             raise VicarError("The value of keyword " + self.table[index][0]
-                           + " cannot be changed by the user")
+                             + " cannot be changed by the user")
 
         # Ignore the error if necessary
-        if immutable and ignore: return
+        if immutable and ignore:
+            return
 
         # Convert tuples to lists
-        if isinstance(value, tuple): value = list(value)
+        if isinstance(value, tuple):
+            value = list(value)
 
         # Replace the value
         self.table[index][1] = value
@@ -699,11 +705,14 @@ class VicarImage():
         # True enables the deletion of immutable keywords.
 
         # If stop value is unspecified, just delete one keyword
-        if stop is None: stop = index + 1
+        if stop is None:
+            stop = index + 1
 
         # Convert negative indices to positive and get the count
-        if index < 0: index = len(self.table) + index
-        if stop <= 0: stop  = len(self.table) + stop
+        if index < 0:
+            index = len(self.table) + index
+        if stop <= 0:
+            stop  = len(self.table) + stop
         count = stop - index
 
         # On override, delete blindly
@@ -724,7 +733,7 @@ class VicarImage():
                 self.table[i:] = self.table[i+1:]
 
     def copy_by_index(self, destination, index, stop=None, ignore=False,
-                    override=False):
+                      override=False):
         """Copies one or more keywords and their values to the header of the
         destination VicarImage.
 
@@ -747,11 +756,14 @@ class VicarImage():
         # True enables the copying of immutable keywords.
 
         # If stop value is unspecified, just copy one keyword
-        if stop is None: stop = index + 1
+        if stop is None:
+            stop = index + 1
 
         # Convert negative indices to positive and get the count
-        if index < 0: index = len(self.table) + index
-        if stop <= 0: stop  = len(self.table) + stop
+        if index < 0:
+            index = len(self.table) + index
+        if stop <= 0:
+            stop  = len(self.table) + stop
         count = stop - index
 
         # On ignore == False, check every keyword first
@@ -771,12 +783,13 @@ class VicarImage():
             immutable = (keyword in IMMUTABLE_KEYWORDS)
 
             # Don't change immutable objects unless specifically requested
-            if immutable and not override: continue
+            if immutable and not override:
+                continue
 
             # Replace the values of required keywords
             if required:
                 destination.set_value(keyword, value, ignore=True,
-                                                      override=override)
+                                      override=override)
             # Otherwise just append a new keyword
             else:
                 destination.append_keyword(keyword, value)
@@ -801,10 +814,11 @@ class VicarImage():
         if not override:
             if keyword.upper() in IMMUTABLE_KEYWORDS:
                 raise VicarError("Required keyword " + keyword.upper()
-                               + " cannot be inserted")
+                                 + " cannot be inserted")
 
         # Convert tuples to lists
-        if isinstance(value, tuple): value = list(value)
+        if isinstance(value, tuple):
+            value = list(value)
 
         # Insert the keyword at the specified location
         if index != -1:
@@ -830,10 +844,11 @@ class VicarImage():
         if not override:
             if keyword.upper() in IMMUTABLE_KEYWORDS:
                 raise VicarError("Required keyword " + keyword.upper()
-                               + " cannot be appended")
+                                 + " cannot be appended")
 
         # Convert tuples to lists
-        if isinstance(value, tuple): value = list(value)
+        if isinstance(value, tuple):
+            value = list(value)
 
         # Append keyword and set value
         self.table.append([keyword.upper(), value])
@@ -894,10 +909,12 @@ class VicarImage():
         i = self.find_keyword(keyword, occurrence, start)
 
         # Return the value if found
-        if i >= 0: return self.table[i][1]
+        if i >= 0:
+            return self.table[i][1]
 
         # Return the default if available
-        if default is not None: return default
+        if default is not None:
+            return default
 
         # Otherwise raise the normal exception
         i = self.keyword_index(keyword, occurrence, start)
@@ -918,12 +935,13 @@ class VicarImage():
         i = -1           # start at the beginning
         while True:
             i = self.find_keyword(keyword, occurrence=0, start=i+1)
-            if i < 0: return results
+            if i < 0:
+                return results
 
             results.append(self.table[i][1])
 
     def set_value(self, keyword, value, occurrence=0, start=0, ignore=False,
-                                                              override=False):
+                  override=False):
         """Replaces the value of a keyword in the VICAR header, or inserts the
         new keyword if it was not found.
 
@@ -966,11 +984,12 @@ class VicarImage():
         pairs currently in the VICAR header.
         """
 
-        ### Internal method returns a value in VICAR header format
+        # Internal method returns a value in VICAR header format
         def _value_string(value):
 
             # Anything but list or tuple
-            if not isinstance(value, (list,tuple)): return _value_string1(value)
+            if not isinstance(value, (list, tuple)):
+                return _value_string1(value)
 
             # Add the individual elements to a list
             result = ["("]
@@ -984,19 +1003,23 @@ class VicarImage():
             # Join the results and return
             return "".join(result)
 
-        ### Internal method returns a value in VICAR header format but does not
-        ### deal with lists
+        # Internal method returns a value in VICAR header format but does not
+        # deal with lists
         def _value_string1(value):
 
-            if isinstance(value, str): return "'" + value + "'"
-            if isinstance(value, dec.Decimal): return str(value)
-            if isinstance(value, numbers.Integral): return str(value)
-            if isinstance(value, numbers.Real): return repr(value)
+            if isinstance(value, str):
+                return "'" + value + "'"
+            if isinstance(value, dec.Decimal):
+                return str(value)
+            if isinstance(value, numbers.Integral):
+                return str(value)
+            if isinstance(value, numbers.Real):
+                return repr(value)
 
             raise VicarError("Illegal value type for a VICAR keyword: " +
                              str(value) + " (" + str(type(value)) + ")")
 
-        ### Actual method begins here
+        # Actual method begins here
         # Prepare the header string as a list of short strings, then join them
 
         # Initialize the list of strings with the LBLSIZE keyword
@@ -1008,7 +1031,7 @@ class VicarImage():
         for i in range(1, len(self.table)):
 
             # Get the next pair
-            (keyword,value) = self.table[i]
+            (keyword, value) = self.table[i]
 
             # Format the value as a string
             value = _value_string(value)
@@ -1027,7 +1050,7 @@ class VicarImage():
         digits = 8      # A practical upper limit on the digits of LBLSIZE!
         vicar_RECSIZE = self.get_value("RECSIZE")
         vicar_LBLSIZE = vicar_RECSIZE * ((length + digits + vicar_RECSIZE - 1)
-                                        // vicar_RECSIZE)
+                                         // vicar_RECSIZE)
 
         self.table[0] = ["LBLSIZE", vicar_LBLSIZE]
         result[1] = _value_string(vicar_LBLSIZE)
@@ -1036,7 +1059,7 @@ class VicarImage():
         # LBLSIZE by one whole record
         digits = len(result[1])
         self.LBLSIZE = vicar_RECSIZE * ((length + digits + vicar_RECSIZE - 1)
-                                       // vicar_RECSIZE)
+                                        // vicar_RECSIZE)
 
         self.table[0] = ["LBLSIZE", vicar_LBLSIZE]
         result[1] = _value_string(vicar_LBLSIZE)
@@ -1069,10 +1092,10 @@ class VicarImage():
 
         return mydict
 
-
     ############################################################################
     # Public Methods for manipulating VICAR array data
     ############################################################################
+
     def set_array(self, array):
         """Replaces the array data in a VicarImage. It also updates all the
         descriptive parameters in the VICAR header.
@@ -1149,7 +1172,6 @@ class VicarImage():
 
         return
 
-
     ############################################################################
     # Private methods
     ############################################################################
@@ -1164,14 +1186,16 @@ class VicarImage():
         Side effects: the table field of the VIcarImage object gets replaced.
         """
 
-        ### Internal method to parse one item starting at index i
+        # Internal method to parse one item starting at index i
         def _parse_single(i):
-            while header[i] == " ": i +=  1
+            while header[i] == " ":
+                i += 1
 
             if header[i] == "'":
                 i += 1
                 j = i
-                while header[j] != "'": j +=  1
+                while header[j] != "'":
+                    j += 1
 
                 value = header[i:j]
                 j += 1
@@ -1189,42 +1213,49 @@ class VicarImage():
                             value = int(header[i:j])
                         break
 
-                    if header[j] in ".Ee": is_float = True
+                    if header[j] in ".Ee":
+                        is_float = True
                     j += 1
 
             return (value, j)
 
-        ### Internal method to parse one item starting at index i
+        # Internal method to parse one item starting at index i
         def _parse_group(i):
             value = []
-            i +=  1
+            i += 1
             while 1:
                 (nextval, i) = _parse_single(i)
 
                 value.append(nextval)
 
-                while header[i] == " ": i +=  1
-                if header[i] == ")": return (value, i+1)
+                while header[i] == " ":
+                    i += 1
+                if header[i] == ")":
+                    return (value, i+1)
 
-                if header[i] == ",": i += 1
+                if header[i] == ",":
+                    i += 1
 
-        ### Actual method begins here
+        # Actual method begins here
         ikey = 0
         self.table = []
         while True:
 
             # Extract the keyword
             jkey = header[ikey:].find("=") + ikey
-            if jkey < ikey: return
+            if jkey < ikey:
+                return
 
             keyword = header[ikey:jkey].strip()
 
             # non-ASCII text indicates end of header
-            if keyword[0] < " " or keyword[0] > "~": return
+            if keyword[0] < " " or keyword[0] > "~":
+                return
 
             # Look for beginning of value
             ivalue = jkey + 1
-            while header[ivalue] == " ": ivalue = ivalue + 1
+            while header[ivalue] == " ":
+                ivalue = ivalue + 1
 
             # Interpret value
             if header[ivalue] == "(":
@@ -1234,4 +1265,3 @@ class VicarImage():
 
             self.table.append([keyword, value])
             ikey = jvalue
-
