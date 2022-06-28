@@ -5,10 +5,108 @@ import decimal as dec
 import numbers
 import warnings
 
+# A dictionary to translate from VICAR FORMAT values to equivalent Python
+# dtypes.
+FORMAT_DICT = { "BYTE" : "u1",
+                "HALF" : "i2",
+                "FULL" : "i4",
+                "REAL" : "f4",
+                "DOUB" : "f8",
+                "COMP" : "c8",
+                "WORD" : "i2",
+                "LONG" : "i4" }
+
+# A dictionary to translate from Python dtypes (kind,itemsize) to their
+# equivalent VICAR FORMAT values.
+DTYPE_DICT = { ("u",1) : "BYTE",
+                ("i",2) : "HALF",
+                ("i",4) : "FULL",
+                ("f",4) : "REAL",
+                ("f",8) : "DOUB",
+                ("c",8) : "COMP" }
+
+# A dictionary of Python (platform,byteorder) values types paired with their
+# equivalent VICAR HOST values.
+HOST_DICT = { ("sunos3", "big"   ) : "SUN-3",
+                ("sunos4", "big"   ) : "SUN-4",
+                ("sunos5", "big"   ) : "SUN-SOLR",
+                ("sunos5", "little") : "X86-LINUX",
+                ("darwin", "big"   ) : "MAC-OSX",
+                ("darwin", "little") : "MAC-OSX",
+                ("linux2", "little") : "X86-LINUX",
+                ("win32" , "little") : "WIN-XP"     }
+
+# A dictionary of Python byteorder values types paired with their
+# equivalent VICAR INTFMT and REALFMT values. These are the byteorders
+# returned by sys.byteorder
+SYS_BYTEORDER_DICT = { "little" : ("LOW" , "RIEEE"),
+                        "big"    : ("HIGH", "IEEE" ) }
+
+# These are the byteorders returned by numpy.dtype.byteorder
+INTFMT_REALFMT_DICT = { "<" : ("LOW" , "RIEEE"),
+                        ">" : ("HIGH", "IEEE" ),
+                        "=" : SYS_BYTEORDER_DICT[sys.byteorder],
+                        "|" : SYS_BYTEORDER_DICT[sys.byteorder] }
+
+# Categories of keywords
+REQUIRED_KEYWORDS = ["LBLSIZE" ,
+                        "FORMAT"  ,
+                        "TYPE"    ,
+                        "BUFSIZ"  ,
+                        "DIM"     ,
+                        "EOL"     ,
+                        "RECSIZE" ,
+                        "ORG"     ,
+                        "NL"      ,
+                        "NS"      ,
+                        "NB"      ,
+                        "N1"      ,
+                        "N2"      ,
+                        "N3"      ,
+                        "N4"      ,
+                        "NBB"     ,
+                        "NLB"     ,
+                        "HOST"    ,
+                        "INTFMT"  ,
+                        "REALFMT" ,
+                        "BHOST"   ,
+                        "BINTFMT" ,
+                        "BREALFMT",
+                        "BLTYPE"  ]
+
+IMMUTABLE_KEYWORDS = ["LBLSIZE" ,
+                        "FORMAT"  ,
+                        "TYPE"    ,
+                        "DIM"     ,
+                        "EOL"     ,
+                        "RECSIZE" ,
+                        "ORG"     ,
+                        "NL"      ,
+                        "NS"      ,
+                        "NB"      ,
+                        "N1"      ,
+                        "N2"      ,
+                        "N3"      ,
+                        "N4"      ,
+                        "NBB"     ,
+                        "NLB"     ,
+                        "INTFMT"  ,
+                        "REALFMT" ,
+                        "BINTFMT" ,
+                        "BREALFMT"]
+
+################################################################################
+# VicarError class
+################################################################################
+
+class VicarError(Exception):
+    pass
+    # Nothing else is needed
+
+
 ################################################################################
 # VicarImage class
 ################################################################################
-
 class VicarImage():
     """This class defines the contents of a VICAR data file. It supports methods
     for reading and writing files and for accessing header information.
@@ -67,95 +165,7 @@ class VicarImage():
           organization.
     """
 
-    # A dictionary to translate from VICAR FORMAT values to equivalent Python
-    # dtypes.
-    FORMAT_DICT = { "BYTE" : "u1",
-                    "HALF" : "i2",
-                    "FULL" : "i4",
-                    "REAL" : "f4",
-                    "DOUB" : "f8",
-                    "COMP" : "c8",
-                    "WORD" : "i2",
-                    "LONG" : "i4" }
 
-    # A dictionary to translate from Python dtypes (kind,itemsize) to their
-    # equivalent VICAR FORMAT values.
-    DTYPE_DICT = { ("u",1) : "BYTE",
-                   ("i",2) : "HALF",
-                   ("i",4) : "FULL",
-                   ("f",4) : "REAL",
-                   ("f",8) : "DOUB",
-                   ("c",8) : "COMP" }
-
-    # A dictionary of Python (platform,byteorder) values types paired with their
-    # equivalent VICAR HOST values.
-    HOST_DICT = { ("sunos3", "big"   ) : "SUN-3",
-                  ("sunos4", "big"   ) : "SUN-4",
-                  ("sunos5", "big"   ) : "SUN-SOLR",
-                  ("sunos5", "little") : "X86-LINUX",
-                  ("darwin", "big"   ) : "MAC-OSX",
-                  ("darwin", "little") : "MAC-OSX",
-                  ("linux2", "little") : "X86-LINUX",
-                  ("win32" , "little") : "WIN-XP"     }
-
-    # A dictionary of Python byteorder values types paired with their
-    # equivalent VICAR INTFMT and REALFMT values. These are the byteorders
-    # returned by sys.byteorder
-    SYS_BYTEORDER_DICT = { "little" : ("LOW" , "RIEEE"),
-                           "big"    : ("HIGH", "IEEE" ) }
-
-    # These are the byteorders returned by numpy.dtype.byteorder
-    INTFMT_REALFMT_DICT = { "<" : ("LOW" , "RIEEE"),
-                            ">" : ("HIGH", "IEEE" ),
-                            "=" : SYS_BYTEORDER_DICT[sys.byteorder],
-                            "|" : SYS_BYTEORDER_DICT[sys.byteorder] }
-
-    # Categories of keywords
-    REQUIRED_KEYWORDS = ["LBLSIZE" ,
-                         "FORMAT"  ,
-                         "TYPE"    ,
-                         "BUFSIZ"  ,
-                         "DIM"     ,
-                         "EOL"     ,
-                         "RECSIZE" ,
-                         "ORG"     ,
-                         "NL"      ,
-                         "NS"      ,
-                         "NB"      ,
-                         "N1"      ,
-                         "N2"      ,
-                         "N3"      ,
-                         "N4"      ,
-                         "NBB"     ,
-                         "NLB"     ,
-                         "HOST"    ,
-                         "INTFMT"  ,
-                         "REALFMT" ,
-                         "BHOST"   ,
-                         "BINTFMT" ,
-                         "BREALFMT",
-                         "BLTYPE"  ]
-
-    IMMUTABLE_KEYWORDS = ["LBLSIZE" ,
-                          "FORMAT"  ,
-                          "TYPE"    ,
-                          "DIM"     ,
-                          "EOL"     ,
-                          "RECSIZE" ,
-                          "ORG"     ,
-                          "NL"      ,
-                          "NS"      ,
-                          "NB"      ,
-                          "N1"      ,
-                          "N2"      ,
-                          "N3"      ,
-                          "N4"      ,
-                          "NBB"     ,
-                          "NLB"     ,
-                          "INTFMT"  ,
-                          "REALFMT" ,
-                          "BINTFMT" ,
-                          "BREALFMT"]
 
     ############################################################################
     # Constructor
@@ -307,7 +317,7 @@ class VicarImage():
             this._load_table(this.header)
 
         # Look up the numpy dtype corresponding to the VICAR FORMAT
-        dtypename = VicarImage.FORMAT_DICT[vicar_FORMAT]
+        dtypename = FORMAT_DICT[vicar_FORMAT]
 
         # Check the item size and kind
         itemsize = np.dtype(dtypename).itemsize
@@ -652,7 +662,7 @@ class VicarImage():
         # True enables the modification of immutable keywords.
 
         # Raise an error if necessary
-        immutable = self.table[index][0] in VicarImage.IMMUTABLE_KEYWORDS
+        immutable = self.table[index][0] in IMMUTABLE_KEYWORDS
         if immutable and (not override) and (not ignore):
             raise VicarError("The value of keyword " + self.table[index][0]
                            + " cannot be changed by the user")
@@ -704,13 +714,13 @@ class VicarImage():
         # On ignore == False, check every keyword first
         if not ignore:
             for i in range(index, stop):
-                if self.table[i][0] in VicarImage.REQUIRED_KEYWORDS:
+                if self.table[i][0] in REQUIRED_KEYWORDS:
                     raise VicarError("Required keyword " + self.table[i][0] +
                                      " cannot be deleted")
 
         # Delete the un-required keywords in reverse order
         for i in range(stop-1, index-1, -1):
-            if not (self.table[i][0] in VicarImage.REQUIRED_KEYWORDS):
+            if not (self.table[i][0] in REQUIRED_KEYWORDS):
                 self.table[i:] = self.table[i+1:]
 
     def copy_by_index(self, destination, index, stop=None, ignore=False,
@@ -748,7 +758,7 @@ class VicarImage():
         if not ignore and not override:
             for i in range(index, count):
                 keyword = self.table[i][0]
-                if keyword in VicarImage.IMMUTABLE_KEYWORDS:
+                if keyword in IMMUTABLE_KEYWORDS:
                     raise VicarError("Keyword " + keyword +
                                      " cannot be modified")
 
@@ -757,8 +767,8 @@ class VicarImage():
             keyword = self.table[i][0]
             value = self.table[i][1]
 
-            required  = (keyword in VicarImage.REQUIRED_KEYWORDS)
-            immutable = (keyword in VicarImage.IMMUTABLE_KEYWORDS)
+            required  = (keyword in REQUIRED_KEYWORDS)
+            immutable = (keyword in IMMUTABLE_KEYWORDS)
 
             # Don't change immutable objects unless specifically requested
             if immutable and not override: continue
@@ -789,7 +799,7 @@ class VicarImage():
 
         # Make sure this keyword can be inserted
         if not override:
-            if keyword.upper() in VicarImage.IMMUTABLE_KEYWORDS:
+            if keyword.upper() in IMMUTABLE_KEYWORDS:
                 raise VicarError("Required keyword " + keyword.upper()
                                + " cannot be inserted")
 
@@ -818,7 +828,7 @@ class VicarImage():
 
         # Make sure this keyword can be inserted
         if not override:
-            if keyword.upper() in VicarImage.IMMUTABLE_KEYWORDS:
+            if keyword.upper() in IMMUTABLE_KEYWORDS:
                 raise VicarError("Required keyword " + keyword.upper()
                                + " cannot be appended")
 
@@ -1094,20 +1104,20 @@ class VicarImage():
 
         # Look up the VICAR FORMAT value
         try:
-            vicar_FORMAT = VicarImage.DTYPE_DICT[(dtype.kind, dtype.itemsize)]
+            vicar_FORMAT = DTYPE_DICT[(dtype.kind, dtype.itemsize)]
         except KeyError:
             raise VicarError("Unsupported data type for VICAR: " + str(dtype))
 
         # Fill in the byter ordering information
         (vicar_INTFMT,
-         vicar_REALFMT) = VicarImage.INTFMT_REALFMT_DICT[dtype.byteorder]
+         vicar_REALFMT) = INTFMT_REALFMT_DICT[dtype.byteorder]
 
         # Determine record size
         vicar_RECSIZE = dtype.itemsize * vicar_N1
 
         # Determine the HOST
         try:
-            vicar_HOST = VicarImage.HOST_DICT[(sys.platform, sys.byteorder)]
+            vicar_HOST = HOST_DICT[(sys.platform, sys.byteorder)]
         except KeyError:
             vicar_HOST = sys.platform.upper()
 
@@ -1225,10 +1235,3 @@ class VicarImage():
             self.table.append([keyword, value])
             ikey = jvalue
 
-################################################################################
-# VicarError class
-################################################################################
-
-class VicarError(Exception):
-    pass
-    # Nothing else is needed
