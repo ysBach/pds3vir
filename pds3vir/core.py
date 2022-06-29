@@ -1,7 +1,7 @@
 from pathlib import Path
 from .vicar import VicarImage
 from planetaryimage import PDS3Image
-from astropy.time import Time
+from warnings import warn
 import copy
 import pvl
 
@@ -41,7 +41,11 @@ def open_pds3(path, vicar=True, extraneous='warn', cut=True,
 
             if cut and (cow := pds.label_img.get("CUT_OUT_WINDOW")) is not None:
                 # label from lbl file looks strange... does not match that of img file.
-                pds.data = vic.data_3d[:, cow[0]:cow[2], cow[1]:cow[3]]
+                if (cow[2] - cow[0]) <= 1 or (cow[3] - cow[1] <= 1):
+                    warn("CUT_OUT_WINDOW is incorrect. Omiting `cut`.", RuntimeWarning)
+                    pds.data = vic.data_3d
+                else:
+                    pds.data = vic.data_3d[:, cow[0]:cow[2], cow[1]:cow[3]]
             else:
                 pds.data = vic.data_3d
 
