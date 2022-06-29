@@ -230,16 +230,13 @@ class VicarImage():
             extraneous      how to handle extraneous bytes in the file:
                             'error' to raise ValueError;
                             'warn' to raise a UserWarning;
-                            'print' to print a message;
                             'ignore' to ignore.
 
         Return:             a VicarImage object.
         """
 
-        if extraneous not in ('error', 'warn', 'print', 'ignore'):
-            raise ValueError(
-                f"unrecognized value for extraneous option: {extraneous}"
-            )
+        if extraneous not in ('error', 'warn', 'ignore'):
+            raise ValueError(f"unrecognized value {extraneous = }")
 
         # Create the object
         this = VicarImage()
@@ -355,17 +352,13 @@ class VicarImage():
                 raise
 
             records = vector[:recs*samples].reshape((recs, samples))
-            if extraneous in ('warn', 'print'):
+            if extraneous == 'warn':
                 trailing = vector[recs*samples:]
+                ntr = len(trailing)
                 if np.all(trailing == 0):
-                    message = (f'{filename} has {len(trailing):d} zero-valued trailing items')
+                    warnings.warn(f'{filename} has {ntr:d} trailing 0s')
                 else:
-                    message = (f'{filename} has {len(trailing):d} trailing items')
-
-                if extraneous == 'print':
-                    print(message)
-                else:
-                    warnings.warn(message)
+                    warnings.warn(f'{filename} has {ntr:d} trailing items: {trailing}')
 
         # Slice out the binary header
         vicar_recs = vicar_LBLSIZE // vicar_RECSIZE  # Number of rows for VICAR label
