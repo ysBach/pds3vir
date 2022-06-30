@@ -28,8 +28,12 @@ def open_pds3(path, vicar=True, extraneous='warn', cut=True,
         file keyword if vical=False).
     """
     path = Path(path)
-    pds = PDS3Image.open(str(path))
-    if path.suffix == '.lbl':
+    try:
+        pds = PDS3Image.open(str(path))
+    except FileNotFoundError:
+        path = path.parent / (path.stem + path.suffix.lower())
+        pds = PDS3Image.open(str(path))
+    if path.suffix.lower() == '.lbl':
         if vicar:
             imgpath = Path(pds.filename).parent/pds.data_filename
             vic = VicarImage.from_file(imgpath, extraneous=extraneous)
@@ -66,6 +70,6 @@ def open_pds3(path, vicar=True, extraneous='warn', cut=True,
 
         return pds
 
-    if path.suffix == '.img':
+    if path.suffix.lower() == '.img':
         return pds
 
