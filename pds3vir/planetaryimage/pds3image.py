@@ -9,6 +9,58 @@ from .image import PlanetaryImage
 from .decoders import BandSequentialDecoder
 
 
+SAMPLE_TYPES = {
+    'MSB_INTEGER': '>i',
+    'INTEGER': '>i',
+    'MAC_INTEGER': '>i',
+    'SUN_INTEGER': '>i',
+
+    'MSB_UNSIGNED_INTEGER': '>u',
+    'UNSIGNED_INTEGER': '>u',
+    'MAC_UNSIGNED_INTEGER': '>u',
+    'SUN_UNSIGNED_INTEGER': '>u',
+
+    'LSB_INTEGER': '<i',
+    'PC_INTEGER': '<i',
+    'VAX_INTEGER': '<i',
+
+    'LSB_UNSIGNED_INTEGER': '<u',
+    'PC_UNSIGNED_INTEGER': '<u',
+    'VAX_UNSIGNED_INTEGER': '<u',
+
+    'IEEE_REAL': '>f',
+    'FLOAT': '>f',
+    'REAL': '>f',
+    'MAC_REAL': '>f',
+    'SUN_REAL': '>f',
+
+    'IEEE_COMPLEX': '>c',
+    'COMPLEX': '>c',
+    'MAC_COMPLEX': '>c',
+    'SUN_COMPLEX': '>c',
+
+    'PC_REAL': '<f',
+    'PC_COMPLEX': '<c',
+
+    'MSB_BIT_STRING': '>S',
+    'LSB_BIT_STRING': '<S',
+    'VAX_BIT_STRING': '<S',
+}
+
+DTYPES = {
+    '>i': 'MSB_INTEGER',
+    '>u': 'MSB_UNSIGNED_INTEGER',
+    '<i': 'LSB_INTEGER',
+    '<u': 'LSB_UNSIGNED_INTEGER',
+    '>f': 'IEEE_REAL',
+    '>c': 'IEEE_COMPLEX',
+    '<f': 'PC_REAL',
+    '<c': 'PC_COMPLEX',
+    '>S': 'MSB_BIT_STRING',
+    '<S': 'LSB_BIT_STRING',
+}
+
+
 class Pointer(collections.namedtuple('Pointer', ['filename', 'bytes'])):
     @staticmethod
     def _parse_bytes(value, record_bytes):
@@ -75,57 +127,6 @@ class PDS3Image(PlanetaryImage):
 
     """
 
-    SAMPLE_TYPES = {
-        'MSB_INTEGER': '>i',
-        'INTEGER': '>i',
-        'MAC_INTEGER': '>i',
-        'SUN_INTEGER': '>i',
-
-        'MSB_UNSIGNED_INTEGER': '>u',
-        'UNSIGNED_INTEGER': '>u',
-        'MAC_UNSIGNED_INTEGER': '>u',
-        'SUN_UNSIGNED_INTEGER': '>u',
-
-        'LSB_INTEGER': '<i',
-        'PC_INTEGER': '<i',
-        'VAX_INTEGER': '<i',
-
-        'LSB_UNSIGNED_INTEGER': '<u',
-        'PC_UNSIGNED_INTEGER': '<u',
-        'VAX_UNSIGNED_INTEGER': '<u',
-
-        'IEEE_REAL': '>f',
-        'FLOAT': '>f',
-        'REAL': '>f',
-        'MAC_REAL': '>f',
-        'SUN_REAL': '>f',
-
-        'IEEE_COMPLEX': '>c',
-        'COMPLEX': '>c',
-        'MAC_COMPLEX': '>c',
-        'SUN_COMPLEX': '>c',
-
-        'PC_REAL': '<f',
-        'PC_COMPLEX': '<c',
-
-        'MSB_BIT_STRING': '>S',
-        'LSB_BIT_STRING': '<S',
-        'VAX_BIT_STRING': '<S',
-    }
-
-    DTYPES = {
-        '>i': 'MSB_INTEGER',
-        '>u': 'MSB_UNSIGNED_INTEGER',
-        '<i': 'LSB_INTEGER',
-        '<u': 'LSB_UNSIGNED_INTEGER',
-        '>f': 'IEEE_REAL',
-        '>c': 'IEEE_COMPLEX',
-        '<f': 'PC_REAL',
-        '<c': 'PC_COMPLEX',
-        '>S': 'MSB_BIT_STRING',
-        '<S': 'LSB_BIT_STRING',
-    }
-
     def _save(self, file_to_write, overwrite):
         """Save PDS3Image object as PDS3 file.
 
@@ -153,7 +154,7 @@ class PDS3Image(PlanetaryImage):
         if self._sample_bytes != self.label['IMAGE']['SAMPLE_BITS'] * 8:
             self.label['IMAGE']['SAMPLE_BITS'] = self.data.itemsize * 8
 
-        sample_type_to_save = self.DTYPES[self._sample_type[0] + self.dtype.kind]
+        sample_type_to_save = DTYPES[self._sample_type[0] + self.dtype.kind]
         self.label['IMAGE']['SAMPLE_TYPE'] = sample_type_to_save
 
         if len(self.data.shape) == 3:
@@ -317,7 +318,7 @@ class PDS3Image(PlanetaryImage):
     def _sample_type(self):
         sample_type = self.label['IMAGE']['SAMPLE_TYPE']
         try:
-            return self.SAMPLE_TYPES[sample_type]
+            return SAMPLE_TYPES[sample_type]
         except KeyError:
             raise ValueError('Unsupported sample type: %r' % sample_type)
 
