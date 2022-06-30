@@ -6,7 +6,8 @@ import pvl
 import numpy
 from pathlib import Path
 
-class PlanetaryImage(object):
+
+class PlanetaryImage:
     """A generic image reader. Parent object for PDS3Image and CubeFile
 
     Parameters
