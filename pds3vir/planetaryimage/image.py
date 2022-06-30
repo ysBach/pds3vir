@@ -88,8 +88,15 @@ class PlanetaryImage(object):
             finally:
                 fp.close()
         else:
-            with open(filename, 'rb') as fp:
-                return cls(fp, filename)
+            try:
+                with open(filename, 'rb') as fp:
+                    return cls(fp, filename)
+            except FileNotFoundError:
+                from pathlib import Path
+                filename = Path(filename)
+                filename = filename.parent / (filename.stem + filename.suffix.lower())
+                with open(filename, 'rb') as fp:
+                    return cls(fp, filename)
 
     def __init__(self, stream_string_or_array, filename=None, compression=None):
         """
