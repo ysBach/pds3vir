@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import os
 import gzip
 import bz2
 import six
 import pvl
 import numpy
-
+from pathlib import Path
 
 class PlanetaryImage(object):
     """A generic image reader. Parent object for PDS3Image and CubeFile
@@ -88,15 +87,8 @@ class PlanetaryImage(object):
             finally:
                 fp.close()
         else:
-            try:
-                with open(filename, 'rb') as fp:
-                    return cls(fp, filename)
-            except FileNotFoundError:
-                from pathlib import Path
-                filename = Path(filename)
-                filename = filename.parent / (filename.stem + filename.suffix.lower())
-                with open(filename, 'rb') as fp:
-                    return cls(fp, filename)
+            with open(filename, 'rb') as fp:
+                return cls(fp, filename)
 
     def __init__(self, stream_string_or_array, filename=None, compression=None):
         """
@@ -116,7 +108,7 @@ class PlanetaryImage(object):
             self.label = self._create_label(stream_string_or_array)
         else:
             #: The filename if given, otherwise none.
-            self.filename = filename
+            self.filename = Path(filename)
 
             self.compression = compression
 
@@ -217,8 +209,6 @@ class PlanetaryImage(object):
         return self._decoder.decode(stream)
 
     def _load_detached_data(self):
-        dirpath = os.path.dirname(self.filename)
-        filename = os.path.abspath(os.path.join(dirpath, self.data_filename))
-
-        with open(filename, 'rb') as stream:
+        fpath = self.filename.parent / Path(self.data_filename).name
+        with open(fpath, 'rb') as stream:
             return self._decode(stream)

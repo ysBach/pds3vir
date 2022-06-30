@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy
 import six
-import os
+from pathlib import Path
 import pvl
 import collections
 
@@ -139,7 +139,7 @@ class PDS3Image(PlanetaryImage):
         """
         if overwrite:
             file_to_write = self.filename
-        elif os.path.isfile(file_to_write):
+        elif Path(file_to_write).exists():
             msg = 'File ' + file_to_write + ' already exists !\n' + \
                   'Call save() with "overwrite = True" to overwrite the file.'
             raise IOError(msg)
