@@ -1,6 +1,6 @@
 from pathlib import Path
 from .vicar import VicarImage
-from planetaryimage import PDS3Image
+from .planetaryimage import PDS3Image
 from warnings import warn
 import copy
 import pvl
