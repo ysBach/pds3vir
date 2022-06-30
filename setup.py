@@ -4,7 +4,7 @@
 from setuptools import setup, find_packages
 
 setup_requires = []
-install_requires = ['numpy', "planetaryimage", "pvl", "six", "astropy"]
+install_requires = ['numpy', "pvl", "six", "astropy"]
 
 classifiers = ["Intended Audience :: Science/Research",
                "Operating System :: OS Independent",
