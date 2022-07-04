@@ -219,7 +219,7 @@ class PDS3Image(PlanetaryImage):
                  'SAMPLE_BITS': array.itemsize * 8,
                  'SAMPLE_TYPE': 'MSB_INTEGER',
                  'STANDARD_DEVIATION': 0})
-            ])
+        ])
         return self._update_label(label_module, array)
 
     def _update_label(self, label, array):

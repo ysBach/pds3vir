@@ -110,7 +110,6 @@ class PlanetaryImage:
         else:
             #: The filename if given, otherwise none.
             self.filename = Path(filename)
-
             self.compression = compression
 
             # TODO: rename to header and add footer?
@@ -171,6 +170,18 @@ class PlanetaryImage:
     @property
     def data_filename(self):
         """Return detached filename else None."""
+        if self._data_filename is not None and self.filename is not None:
+            _parent = self.filename.parent
+            _fullpath =  _parent/self._data_filename
+            if not _fullpath.exists():
+                _fullpath = _parent/self._data_filename.lower()
+
+            # If still does not exist...
+            if not _fullpath.exists():
+                _fullpath = _parent/self._data_filename.replace(".IMG", ".img")
+
+            return _fullpath.name
+
         return self._data_filename
 
     @property
