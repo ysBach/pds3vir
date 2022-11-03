@@ -70,6 +70,6 @@ def open_pds3(path, vicar=True, extraneous='warn', cut=True,
 
         return pds
 
-    if path.suffix.lower() == '.img':
+    if path.suffix.lower() in ['.img', '.dat']:
         return pds
 
